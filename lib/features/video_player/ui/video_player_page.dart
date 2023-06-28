@@ -18,6 +18,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   void initState() {
+    // Trigger the VideoPlayerInitialEvent to initialize the bloc
     videoPlayerBloc.add(VideoPlayerInitialEvent());
     super.initState();
   }
@@ -41,18 +42,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         bloc: videoPlayerBloc,
         listenWhen: (previous, current) => current is VideoPlayerActionState,
         buildWhen: (previous, current) => current is! VideoPlayerActionState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          // Handle any necessary state changes or events
+        },
         builder: (context, state) {
           switch (state.runtimeType) {
-            case  VideoPlayerSuccessVideoState:
+            case VideoPlayerSuccessVideoState:
+              // Display the VideoPlayerWidget when VideoPlayerSuccessVideoState is received
               return VideoPlayerWidget(
                 videoPlayerBloc: videoPlayerBloc,
                 clickListener: uiModelClicked,
                 uiModel: VideoPlayerWidgetUiModel(
                     controller: videoPlayerBloc.workingController),
               );
-           
+
             default:
+              // Show a CircularProgressIndicator while loading or for unknown states
               return const Center(child: CircularProgressIndicator());
           }
         },
@@ -65,16 +70,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       case VideoPlayerWidgetUiModel:
         final uiModel = model as VideoPlayerWidgetUiModel;
         if (uiModel.showOptionsEvent) {
+          // Trigger the VideoPlayerShowOptionsWidgetStateChangedEvent when showOptionsEvent is true
           videoPlayerBloc.add(VideoPlayerShowOptionsWidgetStateChangedEvent());
         }
-
         break;
       case VideoPlayerOptionsWidgetUiModel:
         final uiModel = model as VideoPlayerOptionsWidgetUiModel;
+        // Trigger the VideoPlayerChangeFutureVideoEvent with the selected videoType
         videoPlayerBloc.add(
             VideoPlayerChangeFutureVideoEvent(videoType: uiModel.videoType!));
         break;
       default:
+        // Handle any other UiObjectModel types if necessary
     }
   }
 }

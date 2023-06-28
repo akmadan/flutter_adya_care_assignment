@@ -26,6 +26,7 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
 
   bool showOptionsWidget = false;
 
+  // Create ChewieController with videoPath
   ChewieController createController(String videoPath) {
     return ChewieController(
         showControlsOnInitialize: false,
@@ -36,6 +37,7 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
         aspectRatio: 9 / 16);
   }
 
+  // Handle VideoPlayerInitialEvent
   FutureOr<void> videoPlayerInitialEvent(
       VideoPlayerInitialEvent event, Emitter<VideoPlayerState> emit) {
     _chewieControllerInitial = createController('assets/initial_video.mp4');
@@ -46,6 +48,7 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
     emit(VideoPlayerSuccessVideoState());
   }
 
+  // Handle VideoPlayerShowOptionsWidgetStateChangedEvent
   FutureOr<void> videoPlayerShowOptionsWidgetStateChangedEvent(
       VideoPlayerShowOptionsWidgetStateChangedEvent event,
       Emitter<VideoPlayerState> emit) {
@@ -54,23 +57,20 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
     emit(VideoPlayerShowOptionsState());
   }
 
+  // Handle VideoPlayerChangeFutureVideoEvent
   FutureOr<void> videoPlayerChangeFutureVideoEvent(
       VideoPlayerChangeFutureVideoEvent event, Emitter<VideoPlayerState> emit) {
     showOptionsWidget = false;
     switch (event.videoType) {
       case VideoType.happy:
         workingController = _chewieControllerHappy;
-
         break;
       case VideoType.sad:
         workingController = _chewieControllerSad;
-
         break;
       case VideoType.initial:
         workingController = _chewieControllerInitial;
-
         break;
-
       default:
         workingController = _chewieControllerInitial;
     }
