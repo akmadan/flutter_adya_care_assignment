@@ -35,14 +35,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       if (position.inSeconds == 4) {
         if (widget.uiModel.controller.isPlaying) {
           widget.uiModel.controller.pause();
-          changeShowOptionsState();
+
+          widget.clickListener
+              .call(widget.uiModel.copyWith(showOptionsEvent: true));
         }
       } else {}
     });
-  }
-
-  changeShowOptionsState() {
-    widget.clickListener.call(widget.uiModel.copyWith(showOptionsEvent: true));
   }
 
   @override
@@ -61,9 +59,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 aspectRatio: 9 / 16,
                 child: Stack(
                   children: [
-                    Chewie(
-                      controller: widget.uiModel.controller,
-                    ),
+                    Chewie(controller: widget.uiModel.controller),
                     VideoPlayerOptionsWidget(
                         clickListener: widget.clickListener,
                         uiModel: VideoPlayerOptionsWidgetUiModel(),

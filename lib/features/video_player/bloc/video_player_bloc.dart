@@ -26,28 +26,23 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
 
   bool showOptionsWidget = false;
 
+  ChewieController createController(String videoPath) {
+    return ChewieController(
+        showControlsOnInitialize: false,
+        videoPlayerController: VideoPlayerController.asset(videoPath),
+        autoPlay: true,
+        looping: true,
+        showControls: true,
+        aspectRatio: 9 / 16);
+  }
+
   FutureOr<void> videoPlayerInitialEvent(
       VideoPlayerInitialEvent event, Emitter<VideoPlayerState> emit) {
-    _chewieControllerInitial = ChewieController(
-        videoPlayerController:
-            VideoPlayerController.asset('assets/initial_video.mp4'),
-        autoPlay: true,
-        looping: true,
-        aspectRatio: 9 / 16);
-
-    _chewieControllerHappy = ChewieController(
-        videoPlayerController:
-            VideoPlayerController.asset('assets/happy_video.mp4'),
-        autoPlay: true,
-        looping: true,
-        aspectRatio: 9 / 16);
-    _chewieControllerSad = ChewieController(
-        videoPlayerController:
-            VideoPlayerController.asset('assets/sad_video.mp4'),
-        autoPlay: true,
-        looping: true,
-        aspectRatio: 9 / 16);
+    _chewieControllerInitial = createController('assets/initial_video.mp4');
+    _chewieControllerHappy = createController('assets/happy_video.mp4');
+    _chewieControllerSad = createController('assets/sad_video.mp4');
     workingController = _chewieControllerInitial;
+
     emit(VideoPlayerSuccessVideoState());
   }
 
@@ -55,6 +50,7 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
       VideoPlayerShowOptionsWidgetStateChangedEvent event,
       Emitter<VideoPlayerState> emit) {
     showOptionsWidget = true;
+
     emit(VideoPlayerShowOptionsState());
   }
 
